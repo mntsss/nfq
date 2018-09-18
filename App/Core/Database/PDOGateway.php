@@ -7,10 +7,10 @@ namespace App\Core\Database;
  */
 class PDOGateway implements IDatabase
 {
-    private $database_name = "carprolt_gt";
-    private $database_host = "localhost";
-    private $database_user = "carprolt_nfq";
-    private $database_password = '4V&M$l3fecqg';
+    private $database_name = "db_name";
+    private $database_host = "db_host";
+    private $database_user = "db_user";
+    private $database_password = 'db_pass';
 
     protected $connection = FALSE;
     protected $statement;
