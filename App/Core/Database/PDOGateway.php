@@ -7,10 +7,10 @@ namespace App\Core\Database;
  */
 class PDOGateway implements IDatabase
 {
-    private $database_name = "nfq";
+    private $database_name = "carprolt_gt";
     private $database_host = "localhost";
-    private $database_user = "root";
-    private $database_password = "";
+    private $database_user = "carprolt_nfq";
+    private $database_password = '4V&M$l3fecqg';
 
     protected $connection = FALSE;
     protected $statement;
@@ -131,7 +131,7 @@ class PDOGateway implements IDatabase
         $this->prepare($query)->execute($where);
         return $this;
     }
-    
+
     public function insert($table, array $params) {
         $cols = implode(", ", array_keys($params));
         $values = implode(", :", array_keys($params));
