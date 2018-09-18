@@ -1,0 +1,41 @@
+
+body{
+    background-color: #cccccc;
+}
+.brand-image{
+    height: 80px;
+    width: auto;
+    z-index: 100;
+    position: absolute;
+}
+.navbar-brand{
+    height: 45px;
+    width: 90px;
+    overflow: visible;
+}
+.carousel-caption{
+    left: 0 !important;
+    right: 0 !important;
+    background: rgba(0, 0, 0, 0.7);
+}
+.input-group-text{
+    width: 40px !important;
+}
+.show{
+    display: block !important;
+    background: rgba(0, 0, 0, 0.6);
+}
+/******************** Media queries ******************** */
+
+@media screen and (max-width: 576px) {
+    .brand-image{
+        height: 60px;
+        width: auto;
+        z-index: 100;
+    }
+    .navbar-brand{
+        height: 35px;
+        overflow: visible;
+    }
+
+}
