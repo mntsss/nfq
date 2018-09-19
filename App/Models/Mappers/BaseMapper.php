@@ -28,6 +28,11 @@ abstract class BaseMapper
         return $this->gateway;
     }
 
+
+    public function count(){
+        return $this->gateway->count($this->dataTable);
+    }
+
     public function findById($id)
     {
       $where = array('id' => $id);

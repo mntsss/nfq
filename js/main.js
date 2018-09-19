@@ -65,7 +65,7 @@ function createOrder(){
         var div = document.createElement('div');
         document.getElementById("order_alert_container").innerHTML = ''
         div.className = 'alert-success h6 text-center pt-3 pb-3';
-        div.innerHTML = 'Order created!'
+        div.innerHTML = 'Užsakymas sukurtas!'
         document.getElementById("order_alert_container").appendChild(div)
         emptyInputs()
   })

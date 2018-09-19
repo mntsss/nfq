@@ -37,7 +37,10 @@ function populateOrdersTable(){
     else {
         return response.json()
     }})
-    .then(response => {
+    .then(res => {
+        var response = res.orders
+        var pageCount = res.count
+        pagesNavigation(pageCount)
         document.getElementById('orders_table_body').innerHTML = ''
         for(var i=0; i< response.length; i++){
             var tr = document.createElement('tr')
@@ -49,6 +52,7 @@ function populateOrdersTable(){
             tr.onclick = function(){
                 openOrderModal(this)
             }
+            tr.className = "cursor-pointer hover-highlight"
             tr.dataset.id = response[i].id
             tr.dataset.quantity = response[i].quantity
             tr.dataset.address = response[i].shipping_details.address
@@ -82,6 +86,103 @@ function populateOrdersTable(){
 
   })
 }
+
+function sortBy(field, el){
+    var header = el
+    removeShevrons()
+    var sortBy = document.getElementById('orders_table')
+    var sortDirection = document.getElementById('orders_table')
+
+    if(field == sortBy.dataset.sortedBy){
+        if(sortDirection.dataset.sortDirection == "ASC"){
+            sortDirection.dataset.sortDirection = "DESC"
+            var shevronDown = document.createElement('span')
+            shevronDown.className = "fas fa-angle-down px-3"
+            header.appendChild(shevronDown)
+        }
+        else {
+            sortDirection.dataset.sortDirection = "ASC"
+            var shevronUp = document.createElement('span')
+            shevronUp.className = "fas fa-angle-up px-3"
+            header.appendChild(shevronUp)
+        }
+    }else {
+        sortBy.dataset.sortedBy = field
+        sortDirection.dataset.sortDirection = "ASC"
+        var shevronUp = document.createElement('span')
+        shevronUp.className = "fas fa-angle-up px-3"
+        header.appendChild(shevronUp)
+
+    }
+    populateOrdersTable()
+}
+
+function removeShevrons(){
+    var elems = document.querySelectorAll(".fas.fa-angle-up");
+    [].forEach.call(elems, function(el) {
+        el.remove();
+    });
+
+    var elems = document.querySelectorAll(".fas.fa-angle-down");
+    [].forEach.call(elems, function(el) {
+        el.remove();
+    });
+
+}
+
+function nextPage(){
+    var page = document.getElementById('orders_table').dataset.page
+    document.getElementById('orders_table').dataset.page = parseInt(page)+1
+    populateOrdersTable()
+}
+
+function previousPage(){
+    var page = document.getElementById('orders_table').dataset.page
+    var page = parseInt(page)
+    if(page === 1)
+        return;
+    else
+        document.getElementById('orders_table').dataset.page = page-1
+    populateOrdersTable()
+}
+
+function changePerPage(){
+    populateOrdersTable()
+}
+
+function pagesNavigation(count){
+    var page = document.getElementById('orders_table').dataset.page
+    var perPage = document.getElementById('result_per_page').value
+    page = parseInt(page)
+    perPage = parseInt(perPage)
+    count = parseInt(count)
+    var diff = count/perPage
+    diff = Math.ceil(diff)
+    var container = document.getElementById('orders_pagination')
+    container.innerHTML = ''
+    for(var i = 1; i<=diff; i++){
+        var li = document.createElement('li')
+        var a = document.createElement('a')
+        li.className = "page-items"
+        a.className = "page-link bg-dark text-light"
+        if(page == i)
+            a.className += "border-danger"
+        a.onclick = function(){
+            goPage(this)
+        }
+        a.dataset.page = i
+        a.innerHTML = i
+        li.appendChild(a)
+        container.appendChild(li)
+    }
+}
+
+function goPage(el){
+    var destPage = el.dataset.page
+    document.getElementById('orders_table').dataset.page = destPage
+    populateOrdersTable()
+}
+
 function openOrderModal(tr){
 
     var modal = document.getElementById('order_info_modal')
@@ -97,4 +198,26 @@ function openOrderModal(tr){
 function closeModal(){
     var modal = document.getElementById('order_info_modal')
     modal.classList.remove('show')
+}
+
+function orderPaid(){
+    var id = document.getElementById('order_info_modal').dataset.id
+    fetch("/orders/paid/"+id).then(response =>{
+        populateOrdersTable()
+        closeModal()
+    })
+}
+
+function orderShipped(){
+    var id = document.getElementById('order_info_modal').dataset.id
+    fetch("/orders/shipped/"+id).then(response =>{
+        populateOrdersTable()
+        closeModal()
+    })
+}
+
+function seedDatabase(){
+    fetch("/orders/seed").then(response =>{
+        populateOrdersTable()
+    })
 }

@@ -21,7 +21,7 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand to navbar-toggleable-xl navbar-dark bg-dark mb-5">
+    <nav class="navbar navbar-expand to navbar-toggleable-xl navbar-dark bg-dark top-navbar">
             <span class="navbar-brand mb-0 h1"><img src="/media/logo.png" alt="logo" class="brand-image"/></span>
             <span class="ml-4 d-none d-sm-block">
                 <span class="h5 text-danger">GARAGE</span>

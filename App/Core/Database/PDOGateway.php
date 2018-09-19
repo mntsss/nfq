@@ -7,10 +7,10 @@ namespace App\Core\Database;
  */
 class PDOGateway implements IDatabase
 {
-    private $database_name = "db_name";
-    private $database_host = "db_host";
-    private $database_user = "db_user";
-    private $database_password = 'db_pass';
+    private $database_name = "nfq";
+    private $database_host = "localhost";
+    private $database_user = "root";
+    private $database_password = '';
 
     protected $connection = FALSE;
     protected $statement;
@@ -57,6 +57,12 @@ class PDOGateway implements IDatabase
         catch (\PDOException $ex) {
             echo $ex->getMessage();
         }
+    }
+
+    public function count($table){
+        $query = "SELECT COUNT(*) FROM ". $table;
+        $this->prepare($query)->execute();
+        return $this->getStatement()->fetchColumn();
     }
 
     public function execute(array $params = array()) {

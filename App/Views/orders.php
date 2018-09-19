@@ -5,7 +5,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Order shipping information</h5>
+        <h5 class="modal-title">Užsakymo siuntimo informacija</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -14,7 +14,7 @@
         <p>
             <div class="row">
                 <div class="col-sm-5">
-                    Order quantity
+                    Užsakymo kiekis
                 </div>
                 <div class="col-sm-7" id="order_info_modal_quantity">
 
@@ -22,7 +22,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    Shipping address
+                    Siuntimo adresas
                 </div>
                 <div class="col-sm-7" id="order_info_modal_address">
 
@@ -30,7 +30,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    City
+                    Miestas
                 </div>
                 <div class="col-sm-7" id="order_info_modal_city">
 
@@ -38,7 +38,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    Country
+                    Valstybė
                 </div>
                 <div class="col-sm-7" id="order_info_modal_country">
 
@@ -46,7 +46,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    Post code (ZIP)
+                    Pašto kodas (ZIP)
                 </div>
                 <div class="col-sm-7" id="order_info_modal_post">
 
@@ -55,22 +55,22 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-warning">Payment received</button>
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Order shipped</button>
+        <button type="button" class="btn btn-outline-warning" onclick="orderPaid()">Apmokėta</button>
+        <button type="button" class="btn btn-outline-success" onclick="orderShipped()">Išsiųsta</button>
       </div>
     </div>
   </div>
 </div>
 
 
-<div class="container">
+<div class="container mt-5">
     <div class="row mt-3">
-        <div class="col-sm-6">
+        <div class="col-md-5">
             <div class="form-group row">
-                <label for="search_by_user" class="col-sm-2 col-form-label h6">Search</label>
+                <label for="search_by_user" class="col-sm-2 col-form-label h6">Paieška</label>
                 <div class="col-sm-9">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Search by client..." id="search_by_user" aria-describedby="basic-addon2">
+                        <input type="text" class="form-control" placeholder="Ieškoti pagal užsakovą..." id="search_by_user" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button"><span class="fas fa-search"></span></button>
                         </div>
@@ -78,11 +78,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-md-5">
             <div class="form-group row">
-                <label for="result_per_page" class="col-sm-3 col-form-label h6">Rows per page</label>
+                <label for="result_per_page" class="col-sm-3 col-form-label h6">Įrašų skaičius puslapyje</label>
                 <div class="col-sm-9">
-                    <select class="form-control" id="result_per_page">
+                    <select class="form-control" id="result_per_page" onchange="changePerPage()">
                       <option>15</option>
                       <option>25</option>
                       <option>50</option>
@@ -92,23 +92,41 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-2">
+            <button class="btn btn-outline-dark" onclick="seedDatabase()">+ 5 DB Įrašai</button>
+        </div>
     </div>
     <div class="row">
-    <table class="table" id="orders_table" data-sorted-by="id" data-sort-direction = "ASC" data-page="1">
-  <thead class="thead-dark" >
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Client</th>
-      <th scope="col">Added on</th>
-      <th scope="col">Payment received</th>
-      <th scope="col">Order shipped</th>
-    </tr>
-  </thead>
-  <tbody id = "orders_table_body">
+        <div class="table-responsive">
+            <table class="table" id="orders_table" data-sorted-by="id" data-sort-direction = "ASC" data-page="1">
+              <thead class="thead-dark" >
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col" onclick="sortBy('client_name',this)" class="cursor-pointer">Užsakovas</th>
+                  <th scope="col" onclick="sortBy('created_at',this)" class="cursor-pointer">Užsakymo data</th>
+                  <th scope="col" onclick="sortBy('payment_received',this)" class="cursor-pointer">Apmokėta</th>
+                  <th scope="col" onclick="sortBy('order_shipped',this)" class="cursor-pointer">Užsakymas išsiųstas</th>
+                </tr>
+              </thead>
+              <tbody id = "orders_table_body">
 
-  </tbody>
-</table>
+              </tbody>
+          </table>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item bg-dark text-light">
+              <a class="page-link bg-dark text-light " onclick="previousPage()"><span class="fas fa-angle-left px-2"></span>Ankstesnis</a>
+            </li>
+            <span id="orders_pagination" style="display:inherit"></span>
+            <li class="page-item">
+              <a class="page-link bg-dark text-light" onclick="nextPage()">Sekantis<span class="fas fa-angle-right px-2"></span></a>
+            </li>
+          </ul>
+        </nav>
     </div>
 </div>
 <script src="js/orders.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap.native/2.0.15/bootstrap-native-v4.min.js"></script>
+<?php require_once("footer.php"); ?>

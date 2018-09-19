@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Shipping;
 use App\Core\Validator;
 use App\Core\Request;
+use App\Core\Helpers\DBSeeder;
 class OrderController extends Controller
 {
 
@@ -22,12 +23,12 @@ class OrderController extends Controller
       $filtered_params = Validator::filter($request->all());
 
       $errors = array();
-      $errors = Validator::make("Name", $filtered_params['name'])->required()->max(50)->string()->validate();
-      $errors = Validator::make("Address", $filtered_params['address'])->required()->max(50)->string()->validate();
-      $errors = Validator::make("City", $filtered_params['city'])->required()->min(3)->max(50)->string()->validate();
-      $errors = Validator::make("country", $filtered_params['country'])->required()->max(30)->string()->validate();
-      $errors = Validator::make("Post code", $filtered_params['post'])->required()->max(15)->string()->validate();
-      $errors = Validator::make("Quantity", $filtered_params['quantity'])->required()->validate();
+      $errors = Validator::make("Vardas", $filtered_params['name'])->required()->max(50)->string()->validate();
+      $errors = Validator::make("Adresas", $filtered_params['address'])->required()->max(50)->string()->validate();
+      $errors = Validator::make("Miestas", $filtered_params['city'])->required()->min(3)->max(50)->string()->validate();
+      $errors = Validator::make("Valstybė", $filtered_params['country'])->required()->max(30)->string()->validate();
+      $errors = Validator::make("Pašto kodas", $filtered_params['post'])->required()->max(15)->string()->validate();
+      $errors = Validator::make("Kiekis", $filtered_params['quantity'])->required()->validate();
 
       $errors = array_filter($errors);
       if(empty($errors)){
@@ -63,12 +64,38 @@ class OrderController extends Controller
         $shippingMapper = new ShippingMapper($gateway);
         $orderMapper = new OrderMapper($gateway, $shippingMapper);
         $orders = $orderMapper->paginate($filtered_params['page'],$filtered_params['perPage'])->sort($filtered_params['sortBy'], $filtered_params['sortDirection'])->findAll();
-        $this->response($orders, 200);
+        $ordersCount = $orderMapper->count();
+        $this->response(["orders" => $orders, "count" => $ordersCount], 200);
     }
     public function delete($params = []){
         $gateway = new PDOGateway();
         $shippingMapper = new ShippingMapper($gateway);
         $orderMapper = new OrderMapper($gateway, $shippingMapper);
         $orderMapper->delete($params[0]);
+    }
+
+    public function paid($params = []){
+        $gateway = new PDOGateway();
+        $shippingMapper = new ShippingMapper($gateway);
+        $orderMapper = new OrderMapper($gateway, $shippingMapper);
+        $orderMapper->paid((int)$params[0]);
+        $this->response(null, 200);
+    }
+
+    public function shipped($params = []){
+        $gateway = new PDOGateway();
+        $shippingMapper = new ShippingMapper($gateway);
+        $orderMapper = new OrderMapper($gateway, $shippingMapper);
+        $orderMapper->shipped((int)$params[0]);
+        $this->response(null, 200);
+    }
+
+    public function seed(){
+        $gateway = new PDOGateway();
+        $shippingMapper = new ShippingMapper($gateway);
+        $orderMapper = new OrderMapper($gateway, $shippingMapper);
+        $seeder = new DBSeeder($gateway, $shippingMapper, $orderMapper);
+
+        $seeder->load(5);
     }
 }

@@ -34,25 +34,25 @@ class Validator
 
     public function min($min){
         if(strlen(self::$value) < $min)
-            self::$errors[] = self::$name." is too short, minimum length should be ".$min." symbols.";
+            self::$errors[] = self::$name." per trumpas, mažiausias ilgis - ".$min." simboliai.";
         return $this;
     }
 
     public function max($max){
         if(strlen(self::$value) > $max)
-            self::$errors[] = self::$name." is too long, maximum length should be ".$max." symbols.";
+            self::$errors[] = self::$name." per ilgas, maksimalus ilgis - ".$max." simboliai.";
         return $this;
     }
 
     public function string(){
         if(!is_string(self::$value))
-            self::$errors[] = self::$name." given in incorrent format, expected a string";
+            self::$errors[] = self::$name." įvesta neteisingu formatu.";
         return $this;
     }
 
     public function required(){
         if(self::$value == null || self::$value == "" || self::$value == "null"){
-            self::$errors[] = self::$name." is required.";
+            self::$errors[] = self::$name." privalomas.";
         }
         return $this;
     }

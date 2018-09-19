@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
 
     public function index(){
-        $this->view("template");
+        $this->view("main");
     }
     public function orders(){
         $this->view("orders");
