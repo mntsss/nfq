@@ -20,6 +20,6 @@ interface IDatabase
     public function insert($table, array $params);
     public function update($table, array $params, $where = "");
     public function delete($table, $where = "");
-    public function count($table);
-
+    public function count($table, array $where = array());
+    public function search($searchParams);
 }

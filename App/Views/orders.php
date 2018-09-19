@@ -70,9 +70,9 @@
                 <label for="search_by_user" class="col-sm-2 col-form-label h6">Paieška</label>
                 <div class="col-sm-9">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Ieškoti pagal užsakovą..." id="search_by_user" aria-describedby="basic-addon2">
+                        <input type="text" class="form-control" placeholder="Ieškoti pagal užsakovą..." id="search_input" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button"><span class="fas fa-search"></span></button>
+                            <button class="btn btn-outline-secondary" type="button" onclick="populateOrdersTable()"><span class="fas fa-search"></span></button>
                         </div>
                     </div>
                 </div>

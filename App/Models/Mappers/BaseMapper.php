@@ -29,8 +29,8 @@ abstract class BaseMapper
     }
 
 
-    public function count(){
-        return $this->gateway->count($this->dataTable);
+    public function count(array $where = array()){
+        return $this->gateway->count($this->dataTable, $where);
     }
 
     public function findById($id)
@@ -68,6 +68,29 @@ abstract class BaseMapper
 
         $selectParams = compact('table', 'where', 'boolOperator', 'orderByField', 'orderDirection', 'pageNumber', 'pageLimit');
         $this->gateway->select($selectParams);
+        $rows = $this->gateway->fetchAll();
+
+        if ($rows) {
+            foreach ($rows as $row) {
+                $objects[] = $this->mapObject($row);
+            }
+        }
+
+        return $objects;
+    }
+
+    public function search(array $params = array()){
+        $objects = array();
+
+        $table = $this->dataTable;
+        $orderByField = $this->sortField;
+        $boolOperator = " AND ";
+        $orderDirection = $this->sortDirection;
+        $pageNumber = $this->pageNumber;
+        $pageLimit = $this->pageLimit;
+        $where = $params;
+        $searchParams = compact('table', 'where', 'boolOperator', 'orderByField', 'orderDirection', 'pageNumber', 'pageLimit');
+        $this->gateway->search($searchParams);
         $rows = $this->gateway->fetchAll();
 
         if ($rows) {

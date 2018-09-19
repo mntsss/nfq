@@ -59,9 +59,18 @@ class PDOGateway implements IDatabase
         }
     }
 
-    public function count($table){
-        $query = "SELECT COUNT(*) FROM ". $table;
-        $this->prepare($query)->execute();
+    public function count($table, array $where = array()){
+        if ($where) {
+            $params = array();
+            foreach ($where as $col => $value) {
+                unset($where[$col]);
+                $where[":" . $col] = $value;
+                $params[] = $col . " = :" . $col;
+            }
+        }
+        $query = "SELECT COUNT(*) FROM ". $table
+        . (($where) ? " WHERE ". implode(" AND ", $params) : " ");
+        $this->prepare($query)->execute($where);
         return $this->getStatement()->fetchColumn();
     }
 
@@ -127,6 +136,30 @@ class PDOGateway implements IDatabase
                 unset($where[$col]);
                 $where[":" . $col] = $value;
                 $params[] = $col . " = :" . $col;
+            }
+        }
+        $query = "SELECT * FROM " . $table
+            . (($where) ? " WHERE ". implode(" " . $boolOperator . " ", $params) : " ")
+            .(($orderByField) ? " ORDER BY $orderByField"
+            .(($orderByField && $orderDirection) ? " ".$orderDirection : " ASC ") : " ")
+            .(($pageNumber && $pageLimit) ? " LIMIT ". $pageLimit ." OFFSET ". ($pageNumber-1)*$pageLimit : " ");
+        $this->prepare($query)->execute($where);
+        return $this;
+    }
+
+    public function search($selectParams) {
+      extract($selectParams);
+
+      if(!$boolOperator) $boolOperator = " AND ";
+
+      if($pageLimit && !$pageNumber) $pageNumber = 1;
+        if ($where) {
+
+            $params = array();
+            foreach ($where as $col => $value) {
+                unset($where[$col]);
+                $where[":" . $col] = "%".$value."%";
+                $params[] = $col . " LIKE :" . $col;
             }
         }
         $query = "SELECT * FROM " . $table

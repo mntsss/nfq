@@ -41,7 +41,8 @@ class OrderMapper extends BaseMapper implements IOrderMapper
         $this->shippingMapper->delete($shipping_id);
         return $this->gateway->delete($this->dataTable, "id = $id");
     }
-    // php side sorting, not used at the moment because sorting in DB 
+
+    // php side sorting, not used at the moment because sorting in DB
 
     // public function sortASC($sortBy, $secondaryFieldName = null){
     //   if(!$this->objectStore)

@@ -63,8 +63,16 @@ class OrderController extends Controller
         $gateway = new PDOGateway();
         $shippingMapper = new ShippingMapper($gateway);
         $orderMapper = new OrderMapper($gateway, $shippingMapper);
-        $orders = $orderMapper->paginate($filtered_params['page'],$filtered_params['perPage'])->sort($filtered_params['sortBy'], $filtered_params['sortDirection'])->findAll();
-        $ordersCount = $orderMapper->count();
+        if($filtered_params['searchQuery'] != null && $filtered_params['searchQuery'] != '')
+        {
+            $orders = $orderMapper->paginate($filtered_params['page'],$filtered_params['perPage'])->sort($filtered_params['sortBy'], $filtered_params['sortDirection'])->search(['client_name' => $filtered_params['searchQuery']]);
+            $ordersCount = $orderMapper->count(['client_name' => $filtered_params['searchQuery']]);
+        }
+        else
+        {
+            $orders = $orderMapper->paginate($filtered_params['page'],$filtered_params['perPage'])->sort($filtered_params['sortBy'], $filtered_params['sortDirection'])->findAll();
+            $ordersCount = $orderMapper->count();
+        }
         $this->response(["orders" => $orders, "count" => $ordersCount], 200);
     }
     public function delete($params = []){

@@ -14,5 +14,5 @@ interface IOrderMapper{
 
     public function paid($id);
     public function shipped($id);
-
+    public function search(array $params = array());
 }

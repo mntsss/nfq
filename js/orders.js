@@ -2,6 +2,8 @@
 markActiveLink()
 populateOrdersTable()
 
+
+
 function markActiveLink(){
     var activeurl = window.location.href;
     links = document.getElementsByTagName("a");
@@ -18,11 +20,11 @@ function populateOrdersTable(){
     var sortBy = document.getElementById('orders_table').dataset.sortedBy
     var page = document.getElementById('orders_table').dataset.page
     var sortDirection = document.getElementById('orders_table').dataset.sortDirection
-
+    var searchQuery = document.getElementById('search_input').value
   // sending api request
   fetch("/orders/all", {
     method: "POST",
-    body: JSON.stringify({sortBy: sortBy, sortDirection: sortDirection, perPage: perPage, page: page}),
+    body: JSON.stringify({sortBy: sortBy, sortDirection: sortDirection, perPage: perPage, page: page, searchQuery: searchQuery}),
     credentials: "same-origin",
     headers: {
            "Content-Type": "application/json; charset=utf-8",
